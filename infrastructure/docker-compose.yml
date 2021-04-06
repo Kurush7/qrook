@@ -1,0 +1,64 @@
+version: "3"
+services:
+  postgres:
+    image: postgres
+    restart: unless-stopped
+    container_name: qrook_postgres
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-pondoxo}
+      - POSTGRES_USER=${POSTGRES_USER:-kurush}
+      - POSTGRES_DB=${POSTGRES_DB:-qrook_db_new}
+    volumes:
+      - ./.docker/data/postgresql/:/var/lib/postgresql/data/
+    ports:
+      - 5432:5432
+
+  nginx:
+    image: nginx:alpine
+    restart: unless-stopped
+    container_name: qrook_nginx
+    volumes:
+      - ./.docker/etc/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./.docker/data/nginx/:/var/www/
+    ports:
+      - 80:80
+
+  frontend:
+    image: qrook_frontend
+    restart: unless-stopped
+    container_name: qrook_frontend
+    ports:
+      - 8080:8080
+
+  backend_auth:
+    image: qrook_auth
+    restart: unless-stopped
+    container_name: qrook_auth
+    volumes:
+      - ../backend/auth_service/config.yaml:/var/lib/postgresql/data/
+    ports:
+      - 5000:5000
+
+  backend_files:
+    image: qrook_file
+    restart: unless-stopped
+    container_name: qrook_file
+    volumes:
+      - ../books/:/file_service/books/
+      - ../static/:/file_service/static/
+    ports:
+      - 5001:5001
+
+  backend_search:
+    image: qrook_search
+    restart: unless-stopped
+    container_name: qrook_search
+    ports:
+      - 5002:5002
+
+  backend_scout:
+    image: qrook_scout
+    restart: unless-stopped
+    container_name: qrook_scout
+    ports:
+      - 5003:5003

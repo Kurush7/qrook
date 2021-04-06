@@ -1,0 +1,16 @@
+publications:
+- language_code not null
+
+triggers:
+- books_count: insert/delete/
+- check for book_count correctance in books_series
+
+- настроить репликации
+
+
+roles - донастроить
+- admin
+- guest
+- logged_user
+
+set role guest - to change role in session

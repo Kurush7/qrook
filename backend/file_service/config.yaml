@@ -1,0 +1,16 @@
+app:
+  app_name: FileService
+  debug: false
+  host: qrook_file
+  port: 5001
+  logging:
+      logger_name: FileServiceLogger
+      app_name: FileService
+      level: info
+      file: file_service.log
+      file_level: info
+
+jwt:
+  secret: 'unexpectedly white'
+  algorithm: HS256
+  exp_seconds: 86400

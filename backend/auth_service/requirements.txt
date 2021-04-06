@@ -1,0 +1,10 @@
+qrookDB
+Flask==1.1.2
+Flask-HTTPAuth==4.2.0
+Flask-Cors==3.0.10
+confuse
+PyJWT
+psycopg2-binary==2.8.6
+Inject
+requests
+gevent

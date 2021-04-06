@@ -1,0 +1,33 @@
+app:
+  app_name: AuthService
+  debug: false
+  host: qrook_auth
+  port: 5000
+  logging:
+      logger_name: AuthServiceLogger
+      app_name: AuthService
+      level: info
+      file: auth_service.log
+      file_level: info
+
+services:
+  file_service: http://qrook_file:5001/
+
+database:
+  connector: postgres
+  dbname: qrook_db_new
+  username: moderator
+  password: moderator
+  host: qrook_postgres
+  port: 5432
+  logging:
+    logger_name: DatabaseLogger
+    app_name: AuthService
+    level: info
+    file: auth_service.log
+    file_level: info
+
+jwt:
+  secret: 'unexpectedly white'
+  algorithm: HS256
+  exp_seconds: 86400

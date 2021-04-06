@@ -1,0 +1,25 @@
+app:
+  app_name: AdminService
+  debug: false
+  host: localhost
+  port: 5005
+  logging:
+      logger_name: AdminServiceLogger
+      app_name: AdminService
+      level: info
+      file: admin_service.log
+      file_level: info
+
+database:
+  connector: postgres
+  dbname: qrook_db_new
+  username: moderator
+  password: moderator
+  host: localhost
+  port: 5432
+  logging:
+    logger_name: DatabaseLogger
+    app_name: AdminService
+    level: info
+    file: admin_service.log
+    file_level: info

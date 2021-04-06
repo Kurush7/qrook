@@ -1,0 +1,33 @@
+app:
+  app_name: SearchService
+  debug: false
+  host: qrook_search
+  port: 5002
+  logging:
+      logger_name: SearchServiceLogger
+      app_name: SearchService
+      level: info
+      file: search_service.log
+      file_level: info
+
+services:
+  file_service: http://qrook_file:5001/
+
+database:
+  connector: postgres
+  dbname: qrook_db_new
+  username: guest
+  password: guest
+  host: qrook_postgres
+  port: 5432
+  logging:
+    logger_name: DatabaseLogger
+    app_name: SearchService
+    level: info
+    file: search_service.log
+    file_level: info
+
+jwt:
+  secret: 'unexpectedly white'
+  algorithm: HS256
+  exp_seconds: 86400

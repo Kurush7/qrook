@@ -1,0 +1,30 @@
+app:
+  app_name: ScoutService
+  debug: false
+  host: qrook_scout
+  port: 5003
+  logging:
+      logger_name: ScoutServiceLogger
+      app_name: ScoutService
+      level: info
+      file: scout_service.log
+      file_level: info
+
+database:
+  connector: postgres
+  dbname: qrook_db_new
+  username: moderator
+  password: moderator
+  host: qrook_postgres
+  port: 5432
+  logging:
+    logger_name: DatabaseLogger
+    app_name: ScoutService
+    level: info
+    file: scout_service.log
+    file_level: info
+
+jwt:
+  secret: 'unexpectedly white'
+  algorithm: HS256
+  exp_seconds: 86400
