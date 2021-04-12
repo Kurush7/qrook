@@ -8,4 +8,4 @@ RUN pip3.6 install -r ./search_service/requirements.txt
 COPY ./search_service ./search_service
 COPY ./common ./common
 WORKDIR ./search_service
-CMD ["python", "main.py"]
+CMD ["python", "search_service.py"]

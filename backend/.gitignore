@@ -1,8 +1,10 @@
 # Custom
 **/*.log
-db
 *.csv
- file_service/books
+**/html/**
+**/latex/**
+**/classes_backend.png
+**/packages_backend.png
 
 # Created by https://www.toptal.com/developers/gitignore/api/python,pycharm,web,git
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,pycharm,web,git

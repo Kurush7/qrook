@@ -8,4 +8,4 @@ RUN pip3.6 install -r ./file_service/requirements.txt
 COPY ./file_service ./file_service
 COPY ./common ./common
 WORKDIR ./file_service
-CMD ["python", "main.py"]
+CMD ["python", "file_service.py"]

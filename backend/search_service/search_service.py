@@ -133,6 +133,8 @@ def main(ctx: QRContext):
 def author(ctx: QRContext):
     id = int(ctx.params['id'])
     data = ctx.repository.get_full_author(id)
+    if data is None:
+        return MethodResult('author not found', 500)
     data = parse_dict(data, remove=['created_at', 'updated_at'])
     manage_urls(data)
     return MethodResult(data)
@@ -141,6 +143,8 @@ def author(ctx: QRContext):
 def series(ctx: QRContext):
     id = int(ctx.params['id'])
     data = ctx.repository.get_full_series(id)
+    if data is None:
+        return MethodResult('series not found', 500)
     data = parse_dict(data, remove=['created_at', 'updated_at'])
     manage_urls(data)
     return MethodResult(data)
@@ -149,6 +153,8 @@ def series(ctx: QRContext):
 def book(ctx: QRContext):
     id = int(ctx.params['id'])
     data = ctx.repository.get_full_book(id)
+    if data is None:
+        return MethodResult('book not found', 500)
     data = parse_dict(data, rename={'book_number': 'book_order'},
                       remove=['created_at', 'updated_at'])
     manage_urls(data)

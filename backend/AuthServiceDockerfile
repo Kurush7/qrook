@@ -8,4 +8,4 @@ RUN pip3.6 install -r ./auth_service/requirements.txt
 COPY ./auth_service ./auth_service
 COPY ./common ./common
 WORKDIR ./auth_service
-CMD ["python", "main.py"]
+CMD ["python", "auth_service.py"]

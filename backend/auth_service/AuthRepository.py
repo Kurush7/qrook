@@ -1,9 +1,40 @@
 import IQRRepository as rep
 from qrookDB.data import QRTable
+from abc import abstractmethod
 users = QRTable()
 
 
-class AuthRepository(rep.QRRepository):
+class IAuthRepository:
+    @abstractmethod
+    def check_credentials(self, login, password):
+        """check credentials"""
+
+    @abstractmethod
+    def find_existing_user(self, email, login, all=False):
+        """find user by email or login"""
+
+    @abstractmethod
+    def register_user(self, name, last_name, email, login, password):
+        """register new user"""
+
+    @abstractmethod
+    def update_user(self, id, login=None, password=None, name=None, last_name=None, email=None, avatar=None):
+        """update user info"""
+
+    @abstractmethod
+    def get_user_preview(self, user_id):
+        """get short user info"""
+
+    @abstractmethod
+    def get_user_full(self, user_id):
+        """get full user info"""
+
+    @abstractmethod
+    def delete_user(self, user_id):
+        """delete user"""
+
+
+class AuthRepository(IAuthRepository, rep.QRRepository):
     def __init__(self):
         super().__init__()
 
@@ -11,8 +42,9 @@ class AuthRepository(rep.QRRepository):
         if self.db is None:
             raise Exception('DBAdapter not connected to database')
         users = self.db.users
-        user_id = self.db.select(users, users.id).where(login=login, password=password).one()
-        return user_id['id']
+        user = self.db.select(users, users.id).where(login=login, password=password).one()
+        if not user: return None
+        return user['id']
 
     def find_existing_user(self, email, login, all=False):
         if self.db is None:

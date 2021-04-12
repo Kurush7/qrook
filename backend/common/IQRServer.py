@@ -36,6 +36,9 @@ class QRContext:
 
     def get_repository(self): return self.__rep
 
+    def get_manager(self, name):
+        return self.managers.get(name)
+
     params = property(get_params)
     json_data = property(get_json_data)
     headers = property(get_headers)

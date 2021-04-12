@@ -20,9 +20,7 @@ def register_event(ctx: QRContext, user_id):
     if data is None:
         data = dict()
 
-    data['user'] = user_id
-
-    ok = ctx.repository.register_event(time, event, data)
+    ok = ctx.repository.register_event(user_id, time, event, data)
     if not ok:
         return MethodResult('failed to insert into db', 500)
 

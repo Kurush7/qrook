@@ -430,8 +430,6 @@ paths:
       tags:
         - Search
       security: []
-
-
   /scout/register_event:
     post:
       summary: Register event

@@ -1,11 +1,10 @@
-from flask import send_from_directory  # todo file service fully flask-dependent
 import sys
 from pathlib import Path
 sys.path.append("..")
 sys.path.append("../common")
 
 from TokenManager import *
-#from werkzeug.utils import secure_filename
+from FileManager import *
 
 from FlaskServer import *
 from IQRServer import *
@@ -17,35 +16,40 @@ AVATARS_FOLDER = UPLOAD_FOLDER + 'images/avatars'
 
 
 def get_book_image(ctx: QRContext, filename):
+    man = ctx.managers['file_manager']
     return MethodResult(
-        send_from_directory(UPLOAD_FOLDER + 'images/book_images', filename),
+        man.send_file(UPLOAD_FOLDER + 'images/book_images', filename),
         raw_data=True)
 
 
 def get_author_photo(ctx: QRContext, filename):
+    man = ctx.managers['file_manager']
     return MethodResult(
-        send_from_directory(UPLOAD_FOLDER + 'images/author_photos', filename),
+        man.send_file(UPLOAD_FOLDER + 'images/author_photos', filename),
         raw_data=True)
 
 
 def get_avatar(ctx: QRContext, filename):
+    man = ctx.managers['file_manager']
     return MethodResult(
-        send_from_directory(AVATARS_FOLDER, filename),
+        man.send_file(AVATARS_FOLDER, filename),
         raw_data=True)
 
 
 def get_series_image(ctx: QRContext, filename):
+    man = ctx.managers['file_manager']
     return MethodResult(
-        send_from_directory(UPLOAD_FOLDER + 'images/series_images', filename),
+        man.send_file(UPLOAD_FOLDER + 'images/series_images', filename),
         raw_data=True)
 
 
 @require_token()
 def get_book(ctx: QRContext, req_path, user_id):
+    man = ctx.managers['file_manager']
     dir = req_path[:req_path.rfind('/')]
     file = req_path[req_path.rfind('/')+1:]
     return MethodResult(
-        send_from_directory(BOOKS_FOLDER + dir, file),
+        man.send_file(BOOKS_FOLDER + dir, file),
         raw_data=True)
 
 
@@ -78,6 +82,9 @@ if __name__ == "__main__":
     token_man = JwtTokenManager()
     token_man.load_config(config['jwt'])
     server.register_manager(token_man)
+
+    file_man = FlaskFileManager()
+    server.register_manager(file_man)
 
     server.register_method('/files/book_image/<filename>', get_book_image, 'GET')
     server.register_method('/files/author_photo/<filename>', get_author_photo, 'GET')

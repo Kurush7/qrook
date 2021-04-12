@@ -3,19 +3,34 @@ from QRConfig import IQRConfig
 from ast import literal_eval
 from qrookDB.data import QRTable
 from dict_parsing import *
+from abc import abstractmethod
 
 books, authors, books_authors, series, books_series, publications, book_files = [QRTable()] * 7
 op = None
 
-def parse_author(a):
-    a = a[2:-2]
-    a = a.replace('\\', '')
-    a = '[' + a + ']'
-    a = list(literal_eval(a))
-    return [{'id': x[0], 'name': x[1]} for x in a]
+
+class ISearchRepository:
+    @abstractmethod
+    def get_full_author(self, id):
+        """get author info by id"""
+    @abstractmethod
+    def get_full_series(self, id):
+        """get series info by id"""
+    @abstractmethod
+    def get_full_book(self, id):
+        """get book info by id"""
+    @abstractmethod
+    def get_filtered_books(self, filters: dict, offset=0, limit=100):
+        """get books previews using filters"""
+    @abstractmethod
+    def get_filtered_authors(self, filters: dict, offset=0, limit=100):
+        """get authors previews using filters"""
+    @abstractmethod
+    def get_filtered_series(self, filters: dict, offset=0, limit=100):
+        """get series previews using filters"""
 
 
-class SearchRepository(rep.QRRepository):
+class SearchRepository(ISearchRepository, rep.QRRepository):
     def __init__(self):
         super().__init__()
 
@@ -76,14 +91,12 @@ class SearchRepository(rep.QRRepository):
             data[i]['type'] = 'author'
         return data
 
-
     def get_filtered_books(self, filters:dict, offset=0, limit=100):
         if filters.get('skip'):
             return []
 
         query = self.db.select(books, books.id, books.title, books.skin_image, books.updated_at, distinct=True)
 
-        # todo add constraint book number not null
         if filters.get('sort') == 'series_order':
             query.add_attribute(books_series.book_number)
 
@@ -120,6 +133,9 @@ class SearchRepository(rep.QRRepository):
 
 
     def __add_book_wheres(self, query, filters):
+        if filters.get('genres'):
+            query.add_attribute(books.genres)
+
         if filters.get('search'):
             # todo add search with other fields
             query.where(op.Eq('lower(books.title)', op.Like('%' + filters['search'].lower() + '%')))

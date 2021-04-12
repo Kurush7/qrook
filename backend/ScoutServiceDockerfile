@@ -8,4 +8,4 @@ RUN pip3.6 install -r ./scout_service/requirements.txt
 COPY ./scout_service ./scout_service
 COPY ./common ./common
 WORKDIR ./scout_service
-CMD ["python", "main.py"]
+CMD ["python", "scout_service.py"]

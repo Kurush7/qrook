@@ -1,0 +1,12 @@
+database:
+  connector: postgres
+  dbname: qrook_db_new
+  username: moderator
+  password: moderator
+  host: localhost
+  port: 5432
+
+jwt:
+  secret: 'unexpectedly white'
+  algorithm: HS256
+  exp_seconds: 86400

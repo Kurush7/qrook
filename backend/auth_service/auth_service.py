@@ -1,4 +1,5 @@
 import sys
+
 sys.path.append("..")
 sys.path.append("../common")
 
@@ -13,6 +14,7 @@ import requests
 
 FILE_SERVICE_URL = None
 FRONT_FILE_SERVICE_URL = 'http://localhost/files/'
+
 
 def register(ctx: QRContext):
     data = ctx.json_data
@@ -33,10 +35,11 @@ def register(ctx: QRContext):
     if user is None:
         return MethodResult('failed to insert into db', 500)
 
-    jwt_token = ctx.managers['token_manager'].make_jwt_token(user['id'])
+    jwt_token = ctx.managers['token_manager'].make_token(user['id'])
     user['access_token'] = jwt_token
 
     return MethodResult({'access_token': jwt_token})
+
 
 def login(ctx: QRContext):
     login = ctx.json_data['login']
@@ -49,7 +52,7 @@ def login(ctx: QRContext):
     if user is None:
         return MethodResult('account not found', 500)
 
-    jwt_token = ctx.managers['token_manager'].make_jwt_token(user_id)
+    jwt_token = ctx.managers['token_manager'].make_token(user_id)
     return MethodResult({'access_token': jwt_token})
 
 
@@ -59,9 +62,11 @@ def user_info(ctx: QRContext, user_id):
     if user is None:
         return MethodResult('account not found', 500)
 
-    user['avatar'] = FRONT_FILE_SERVICE_URL + 'avatar/' + user['avatar']
+    if user['avatar']:
+        user['avatar'] = FRONT_FILE_SERVICE_URL + 'avatar/' + user['avatar']
     parse_dict(user, rename={'surname': 'last_name'})
     return MethodResult(user)
+
 
 @require_token()
 def delete_profile(ctx: QRContext, user_id):
@@ -82,7 +87,7 @@ def update_user(ctx: QRContext, user_id, token):
     new_password = data.get('new_password')
 
     given_user_id = ctx.repository.check_credentials(login, password)
-    if user_id != given_user_id:
+    if user_id != given_user_id:  # login cannot be changed!
         return MethodResult('login and token are different', 500)
 
     avatar_file = ctx.files.get('avatar')
@@ -92,11 +97,8 @@ def update_user(ctx: QRContext, user_id, token):
                              files={'avatar': avatar_file})
         data = data.json()
         avatar = data['filename']
-    else: avatar = None
-
-    user_id = ctx.repository.check_credentials(login, password)
-    if user_id is None:
-        return MethodResult('wrong credentials', 500)
+    else:
+        avatar = None
 
     exists = ctx.repository.find_existing_user(email, login, all=True)
     if len(exists) > 1:
