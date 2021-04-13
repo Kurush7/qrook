@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
     name="qrookDB",
-    version="1.2.2",
+    version="1.2.3",
     author="Kurush",
     author_email="ze17@ya.ru",
     description="tiny ORM for SQL-databases",

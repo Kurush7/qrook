@@ -21,7 +21,7 @@ if __name__ == '__main__':
 
     token_man = JwtTokenManager()
     token_man.load_config(config['jwt'])
-    file_man = FlaskFileManager()
+    file_man = TechUIFileManager('/home/kurush/Documents/qrook')
     console.add_to_storage('managers', [token_man, file_man])
 
     auth_rep = AuthRepository()

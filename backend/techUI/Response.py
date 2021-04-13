@@ -46,12 +46,12 @@ class JsonResponse(IResponse):
 
 
 class FileResponse(IResponse):
-    def __init__(self, status, json):
+    def __init__(self, status, file):
         self.status = status
-        self.json = json
+        self.file = file
 
     def get_status(self):
         return self.status
 
     def get_data(self, limit=500):
-        return '<file>'
+        return self.file
